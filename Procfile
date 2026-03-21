@@ -1,5 +1,5 @@
 release: python manage.py migrate
-web: gunicorn StakeZenith.wsgi:application --log-file -
+web: gunicorn StakeZenithAviator.wsgi:application --log-file -
 
 
 
