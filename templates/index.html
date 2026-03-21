@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,28 +40,31 @@
 </head>
 <body class="h-screen flex flex-col relative">
 
-    <header class="h-16 bg-[#1b1c1d] flex justify-between items-center px-4 border-b border-[#2c2d30] shrink-0">
-        <div class="flex items-center gap-2">
-            <span class="text-red-600 font-black italic text-2xl tracking-tighter">STAKE<span class="text-white">ZENITH</span></span>
+    <audio id="flight-sound" src="{% static 'aviator.mpeg' %}" loop preload="auto"></audio>
+
+    <header class="h-16 bg-[#1b1c1d] flex justify-between items-center px-2 md:px-4 border-b border-[#2c2d30] shrink-0">
+        <div class="flex items-center gap-1">
+            <span class="text-red-600 font-black italic text-xl md:text-2xl tracking-tighter">STAKE<span class="text-white">ZENITH</span></span>
         </div>
         
-        <div class="flex items-center gap-2 md:gap-3">
+        <div class="flex items-center gap-1 md:gap-3">
             {% if user.is_authenticated %}
-            <div class="flex items-center bg-[#2c2d30] rounded-full px-3 py-1 border border-gray-700">
+            <div class="flex items-center bg-[#2c2d30] rounded-full px-2 py-1 border border-gray-700">
                 <div class="flex flex-col items-end leading-none">
-                    <span class="text-[9px] text-gray-400 font-bold uppercase">Balance</span>
-                    <span class="text-green-500 font-black text-xs md:text-sm" id="balance-display">{{ user.aviatorprofile.balance|default:"0.00" }} KES</span>
+                    <span class="text-[8px] text-gray-400 font-bold uppercase">Balance</span>
+                    <span class="text-green-500 font-black text-xs md:text-sm whitespace-nowrap" id="balance-display">{{ user.aviatorprofile.balance|default:"0.00" }} KES</span>
                 </div>
             </div>
-            <button onclick="openDepositModal()" class="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white px-4 py-2 font-black rounded-full text-xs uppercase shadow-md border border-green-400 transition-all active:scale-95">Deposit</button>
-            <button onclick="logout()" class="text-gray-400 hover:text-white p-2 bg-[#2c2d30] rounded-full transition-all active:scale-95" title="Logout">
-                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            <button onclick="openDepositModal()" class="bg-gradient-to-b from-green-500 to-green-600 text-white px-2 py-1.5 md:px-4 md:py-2 font-black rounded-full text-[10px] md:text-xs uppercase shadow-md border border-green-400 transition-all active:scale-95">DEP</button>
+            <button onclick="openWithdrawModal()" class="bg-gradient-to-b from-red-500 to-red-600 text-white px-2 py-1.5 md:px-4 md:py-2 font-black rounded-full text-[10px] md:text-xs uppercase shadow-md border border-red-400 transition-all active:scale-95">W/D</button>
+            <button onclick="logout()" class="text-gray-400 hover:text-white p-1.5 md:p-2 bg-[#2c2d30] rounded-full transition-all active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             </button>
             {% else %}
             <button onclick="document.getElementById('auth-modal').classList.remove('hidden')" class="bg-gradient-to-b from-blue-500 to-blue-600 px-5 py-2 font-black rounded-full text-xs uppercase shadow-md border border-blue-400 text-white">Login</button>
             {% endif %}
             
-            <button class="text-gray-400 hover:text-white p-2 bg-[#2c2d30] rounded-full transition-all active:scale-95 ml-1">
+            <button class="text-gray-400 hover:text-white p-1 md:p-2 bg-[#2c2d30] rounded-full transition-all active:scale-95 ml-1">
                 <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
         </div>
@@ -100,10 +104,10 @@
                     <button onclick="adjustBet(1, 50)" class="text-gray-400 w-10 h-10 font-bold text-xl rounded-full bg-[#1b1c1d] hover:bg-gray-800 transition-colors">+</button>
                 </div>
                 <div class="grid grid-cols-4 gap-1">
-                    <button onclick="setBet(1, 100)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">100</button>
-                    <button onclick="setBet(1, 200)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">200</button>
-                    <button onclick="setBet(1, 500)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">500</button>
-                    <button onclick="setBet(1, 1000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">1000</button>
+                    <button onclick="setBet(1, 50)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500">50</button>
+                    <button onclick="setBet(1, 200)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500">200</button>
+                    <button onclick="setBet(1, 500)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500">500</button>
+                    <button onclick="setBet(1, 1000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500">1000</button>
                 </div>
                 <button id="btn-bet-1" onclick="handleBetAction(1)" class="btn-base btn-bet h-16 w-full flex flex-col items-center justify-center">
                     <span id="btn-title-1" class="font-black text-2xl leading-none flex items-center gap-2">BET</span>
@@ -118,10 +122,10 @@
                     <button onclick="adjustBet(2, 50)" class="text-gray-400 w-10 h-10 font-bold text-xl rounded-full bg-[#1b1c1d] hover:bg-gray-800 transition-colors">+</button>
                 </div>
                 <div class="grid grid-cols-4 gap-1">
-                    <button onclick="setBet(2, 200)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">200</button>
-                    <button onclick="setBet(2, 500)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">500</button>
-                    <button onclick="setBet(2, 1000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">1000</button>
-                    <button onclick="setBet(2, 5000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800 hover:border-gray-500 transition-colors">5000</button>
+                    <button onclick="setBet(2, 200)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800">200</button>
+                    <button onclick="setBet(2, 500)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800">500</button>
+                    <button onclick="setBet(2, 1000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800">1000</button>
+                    <button onclick="setBet(2, 5000)" class="bg-black text-gray-400 text-xs py-1.5 rounded-lg font-bold border border-gray-800">5000</button>
                 </div>
                 <button id="btn-bet-2" onclick="handleBetAction(2)" class="btn-base btn-bet h-16 w-full flex flex-col items-center justify-center">
                     <span id="btn-title-2" class="font-black text-2xl leading-none flex items-center gap-2">BET</span>
@@ -135,8 +139,7 @@
                 <span class="text-[10px] font-bold text-gray-400 uppercase">All Bets</span>
                 <span class="text-gray-500 text-[10px]" id="live-bet-count">15,822 Bets</span>
             </div>
-            <div id="live-bets" class="overflow-y-auto no-scrollbar p-2 space-y-1">
-                </div>
+            <div id="live-bets" class="overflow-y-auto no-scrollbar p-2 space-y-1"></div>
         </div>
     </main>
 
@@ -145,13 +148,25 @@
             <button onclick="document.getElementById('deposit-modal').classList.add('hidden')" class="absolute top-3 right-5 text-gray-500 text-2xl hover:text-white">&times;</button>
             <h2 class="text-xl font-black mb-6 text-green-500 text-center uppercase tracking-widest">Fund Account</h2>
             
-            <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">Amount (Min KES 100)</label>
-            <input type="number" id="dep-amt" placeholder="100" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-4 outline-none text-center text-lg font-bold focus:border-green-500 transition-colors">
+            <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">Amount (Min KES 50)</label>
+            <input type="number" id="dep-amt" placeholder="50" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-4 outline-none text-center text-lg font-bold focus:border-green-500">
             
             <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">M-Pesa Number</label>
-            <input type="text" id="dep-phone" placeholder="07XX XXX XXX" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-8 outline-none text-center font-bold focus:border-green-500 transition-colors">
+            <input type="text" id="dep-phone" placeholder="07XX XXX XXX" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-8 outline-none text-center font-bold focus:border-green-500">
             
-            <button onclick="initiateDeposit()" id="dep-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white py-4 font-black rounded-xl shadow-[0_0_15px_rgba(40,167,69,0.4)] flex justify-center items-center gap-2">PUSH TO PHONE</button>
+            <button onclick="initiateDeposit()" id="dep-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 text-white py-4 font-black rounded-xl shadow-[0_0_15px_rgba(40,167,69,0.4)] flex justify-center items-center gap-2">PUSH TO PHONE</button>
+        </div>
+    </div>
+
+    <div id="withdraw-modal" class="fixed inset-0 modal-overlay hidden z-50 flex justify-center items-center p-4">
+        <div class="bg-[#1b1c1d] w-full max-w-sm rounded-2xl p-6 border border-gray-700 relative shadow-2xl">
+            <button onclick="document.getElementById('withdraw-modal').classList.add('hidden')" class="absolute top-3 right-5 text-gray-500 text-2xl hover:text-white">&times;</button>
+            <h2 class="text-xl font-black mb-6 text-red-500 text-center uppercase tracking-widest">Withdraw Funds</h2>
+            
+            <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">Amount to Withdraw</label>
+            <input type="number" id="with-amt" placeholder="50" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-8 outline-none text-center text-lg font-bold focus:border-red-500">
+            
+            <button onclick="initiateWithdraw()" id="with-btn" class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 text-white py-4 font-black rounded-xl shadow-[0_0_15px_rgba(220,53,69,0.4)] flex justify-center items-center gap-2">WITHDRAW</button>
         </div>
     </div>
 
@@ -159,10 +174,10 @@
         <div class="bg-[#1b1c1d] w-full max-w-sm rounded-2xl p-6 border border-gray-700 relative shadow-2xl">
             <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-3 right-5 text-gray-500 text-2xl hover:text-white">&times;</button>
             <h2 class="text-xl font-black mb-6 text-center uppercase tracking-widest text-blue-500">Account Access</h2>
-            <input type="text" id="auth-user" placeholder="Username" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-3 outline-none focus:border-blue-500 transition-colors">
-            <input type="password" id="auth-pass" placeholder="Password" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-6 outline-none focus:border-blue-500 transition-colors">
-            <button onclick="handleAuth('login')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white py-4 font-black mb-2 rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.4)] flex justify-center items-center gap-2">LOGIN</button>
-            <button onclick="handleAuth('register')" class="w-full bg-[#2c2d30] hover:bg-gray-700 text-white py-4 font-black rounded-xl border border-gray-600 transition-colors flex justify-center items-center gap-2">REGISTER</button>
+            <input type="text" id="auth-user" placeholder="Username" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-3 outline-none focus:border-blue-500">
+            <input type="password" id="auth-pass" placeholder="Password" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-6 outline-none focus:border-blue-500">
+            <button onclick="handleAuth('login')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 font-black mb-2 rounded-xl flex justify-center items-center gap-2">LOGIN</button>
+            <button onclick="handleAuth('register')" class="w-full bg-[#2c2d30] text-white py-4 font-black rounded-xl border border-gray-600 flex justify-center items-center gap-2">REGISTER</button>
         </div>
     </div>
 
@@ -177,22 +192,26 @@
         const csrfToken = '{{ csrf_token }}';
         const isAuth = "{{ user.is_authenticated }}" === "True";
         const spinnerHTML = document.getElementById('spinner-svg').innerHTML;
+        const flightSound = document.getElementById('flight-sound');
+
+        // --- ADMIN CRASH SEQUENCE ---
+        // Edit this array. The game will follow this exact list of crash multipliers in order.
+        const crashSequence = [1.12, 2.45, 1.05, 5.50, 1.80, 1.00, 3.45, 12.00, 1.20, 2.10];
+        let currentSequenceIndex = 0; // Starts at index 0, increments every round
 
         // --- CORE GAME STATE ---
-        let gameState = 'waiting'; // waiting, loading, flying, crashed
+        let gameState = 'waiting'; 
         let currentMultiplier = 1.0;
-        let globalFleePoint = (Math.random() * 5 + 1.2).toFixed(2);
+        let globalFleePoint = 1.0; 
         let startTime = 0;
         let animationFrame;
         let bgOffset = 0;
 
-        // Player Bet States
         let bets = {
             1: { state: 'idle', amount: 0 }, 
             2: { state: 'idle', amount: 0 }
         };
 
-        // UI Elements
         const canvas = document.getElementById('flight-canvas');
         const ctx = canvas.getContext('2d');
         const plane = document.getElementById('plane');
@@ -207,14 +226,12 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // Safe Balance Parser (handles commas and text)
         function getCurrentBalance() {
             let text = balEl.innerText.replace(/,/g, '').replace(' KES', '');
             let parsed = parseFloat(text);
             return isNaN(parsed) ? 0 : parsed;
         }
 
-        // --- BUTTON & BETTING LOGIC ---
         function setBet(panel, val) { 
             if(bets[panel].state !== 'idle') return;
             document.getElementById(`bet-input-${panel}`).value = val; 
@@ -229,11 +246,13 @@
             document.getElementById(`btn-sub-${panel}`).innerText = val.toFixed(2) + ' KES';
         }
 
-        function openDepositModal() {
-            document.getElementById('deposit-modal').classList.remove('hidden');
+        function openDepositModal() { document.getElementById('deposit-modal').classList.remove('hidden'); }
+        function openWithdrawModal() { 
+            if(!isAuth) return document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('withdraw-modal').classList.remove('hidden'); 
         }
 
-        // --- UX ENHANCED BET ACTION ---
+        // --- BET & SUCCESSFUL CASHOUT LOGIC ---
         async function handleBetAction(panelId) {
             if(!isAuth) return document.getElementById('auth-modal').classList.remove('hidden');
             
@@ -244,89 +263,116 @@
             const panelDiv = document.getElementById(`panel-${panelId}`);
             const amt = parseFloat(document.getElementById(`bet-input-${panelId}`).value);
 
-            // STATE 1: IDLE -> Try to place bet
             if(betObj.state === 'idle') {
                 if(gameState === 'flying' || gameState === 'crashed') return;
 
                 let currentBal = getCurrentBalance();
                 if(currentBal < amt) {
-                    Swal.fire({title: 'Insufficient Funds', text: 'Please deposit to place this bet.', icon: 'warning', background: '#1b1c1d', color: '#fff', confirmButtonColor: '#28a745'});
+                    Swal.fire({title: 'Insufficient Funds', text: 'Please deposit to place this bet.', icon: 'warning', background: '#1b1c1d', color: '#fff'});
                     openDepositModal();
                     return;
                 }
 
-                // Show processing spinner
                 btn.disabled = true;
                 title.innerHTML = `${spinnerHTML} WAIT`;
                 sub.innerText = "PROCESSING...";
 
-                // Simulate brief network delay
-                await new Promise(r => setTimeout(r, 300));
+                await new Promise(r => setTimeout(r, 200));
 
-                // Double check balance in case they spammed both panels
                 currentBal = getCurrentBalance();
                 if(currentBal < amt) {
-                    btn.disabled = false;
-                    title.innerHTML = "BET";
-                    sub.innerText = amt.toFixed(2) + ' KES';
-                    Swal.fire({title: 'Insufficient Funds', text: 'Balance exhausted by another bet.', icon: 'error', background: '#1b1c1d', color: '#fff'});
-                    return;
+                    btn.disabled = false; title.innerHTML = "BET"; sub.innerText = amt.toFixed(2) + ' KES';
+                    return Swal.fire({title: 'Insufficient Funds', icon: 'error', background: '#1b1c1d', color: '#fff'});
                 }
 
-                // Lock bet locally
                 betObj.state = 'waiting';
                 betObj.amount = amt;
                 balEl.innerText = (currentBal - amt).toFixed(2) + ' KES';
 
-                // Change UI to Cancel
                 btn.disabled = false;
                 btn.className = "btn-base btn-cancel h-16 w-full flex flex-col items-center justify-center";
                 title.innerHTML = "CANCEL";
                 sub.innerText = "Waiting for next round";
                 panelDiv.classList.add('active');
             }
-            // STATE 2: WAITING -> Cancel bet
             else if(betObj.state === 'waiting') {
                 if(gameState === 'loading' || gameState === 'waiting') {
-                    
-                    // Show cancelling spinner
-                    btn.disabled = true;
-                    title.innerHTML = `${spinnerHTML}`;
-                    sub.innerText = "CANCELLING...";
-
+                    btn.disabled = true; title.innerHTML = `${spinnerHTML}`; sub.innerText = "CANCELLING...";
                     await new Promise(r => setTimeout(r, 200));
 
-                    // Refund visually
                     let currentBal = getCurrentBalance();
                     balEl.innerText = (currentBal + betObj.amount).toFixed(2) + ' KES';
+                    
+                    betObj.state = 'idle'; betObj.amount = 0;
+                    
+                    btn.disabled = false;
+                    btn.className = "btn-base btn-bet h-16 w-full flex flex-col items-center justify-center";
+                    title.innerHTML = "BET"; sub.innerText = document.getElementById(`bet-input-${panelId}`).value + '.00 KES';
+                    panelDiv.classList.remove('active');
+                }
+            }
+            else if(betObj.state === 'in_play') {
+                if(gameState === 'flying') {
+                    // SUCCESSFUL CASHOUT LOGIC
+                    btn.disabled = true;
+                    title.innerHTML = `${spinnerHTML} WAIT`;
+                    sub.innerText = "CASHING OUT...";
+                    
+                    let winAmt = betObj.amount * currentMultiplier;
+                    let currentBal = getCurrentBalance();
+                    balEl.innerText = (currentBal + winAmt).toFixed(2) + ' KES';
                     
                     betObj.state = 'idle';
                     betObj.amount = 0;
                     
-                    // Reset UI
                     btn.disabled = false;
                     btn.className = "btn-base btn-bet h-16 w-full flex flex-col items-center justify-center";
                     title.innerHTML = "BET";
                     sub.innerText = document.getElementById(`bet-input-${panelId}`).value + '.00 KES';
                     panelDiv.classList.remove('active');
+
+                    Swal.fire({
+                        title: 'Cashed Out!', 
+                        text: `You won ${winAmt.toFixed(2)} KES`, 
+                        icon: 'success', 
+                        background: '#1b1c1d', 
+                        color: '#fff', 
+                        timer: 2000, 
+                        showConfirmButton: false
+                    });
                 }
             }
-            // STATE 3: IN PLAY -> Try to Cashout
-            else if(betObj.state === 'in_play') {
-                if(gameState === 'flying') {
-                    // Show cashing out spinner (tension building)
-                    btn.disabled = true;
-                    title.innerHTML = `${spinnerHTML} WAIT`;
-                    title.classList.remove('text-black');
-                    title.classList.add('text-black'); // Ensure contrast on yellow
-                    sub.innerText = "CASHING OUT...";
-                    
-                    // Rigged: Instantly crash plane before they can cash out
-                    setTimeout(() => {
-                        globalFleePoint = currentMultiplier; 
-                    }, 150);
-                }
-            }
+        }
+
+        // --- RIGGED FAKE WITHDRAWAL ---
+        function initiateWithdraw() {
+            const amt = parseFloat(document.getElementById('with-amt').value);
+            const btn = document.getElementById('with-btn');
+            let currentBal = getCurrentBalance();
+            
+            if(!amt || amt < 50) return Swal.fire({title: 'Wait', text: 'Min withdrawal is KES 50', icon: 'warning', background: '#1b1c1d', color: '#fff'});
+            if(amt > currentBal) return Swal.fire({title: 'Failed', text: 'Insufficient Balance', icon: 'error', background: '#1b1c1d', color: '#fff'});
+            
+            btn.disabled = true;
+            btn.innerHTML = `${spinnerHTML} PROCESSING...`;
+            
+            setTimeout(() => {
+                // Deduct balance anyway
+                balEl.innerText = (currentBal - amt).toFixed(2) + ' KES';
+                
+                // Show Error
+                Swal.fire({
+                    title: 'Withdrawal Failed', 
+                    text: 'Error processing transaction with M-Pesa gateway. Please contact support.', 
+                    icon: 'error', 
+                    background: '#1b1c1d', 
+                    color: '#fff'
+                });
+                
+                document.getElementById('withdraw-modal').classList.add('hidden');
+                btn.disabled = false;
+                btn.innerHTML = "WITHDRAW";
+            }, 2000);
         }
 
         // --- FLIGHT ENGINE ---
@@ -339,7 +385,6 @@
             statusText.classList.remove('hidden');
             loader.classList.remove('hidden');
 
-            // Reset idle panels
             [1, 2].forEach(p => {
                 if(bets[p].state === 'idle') {
                     const btn = document.getElementById(`btn-bet-${p}`);
@@ -363,38 +408,30 @@
             gameState = 'flying';
             startTime = Date.now();
             currentMultiplier = 1.0;
+            
+            // PLAY SOUND
+            flightSound.currentTime = 0;
+            flightSound.play().catch(e => console.log("Audio autoplay blocked by browser. User must click first."));
+
             plane.classList.remove('hidden');
             multDisplay.classList.remove('hidden');
             multDisplay.style.color = '#fff';
             statusText.classList.add('hidden');
             
-            let userHasActiveBet = false;
+            // ADMIN RIGGED SEQUENCE: Pick next value in the array
+            globalFleePoint = crashSequence[currentSequenceIndex % crashSequence.length];
+            currentSequenceIndex++; // Move to next for next round
+
             for (let p of [1, 2]) {
                 if(bets[p].state === 'waiting') {
-                    userHasActiveBet = true;
                     bets[p].state = 'in_play';
-                    
                     const btn = document.getElementById(`btn-bet-${p}`);
                     btn.className = "btn-base btn-cashout h-16 w-full flex flex-col items-center justify-center";
                     document.getElementById(`btn-title-${p}`).innerHTML = "<span class='text-black'>CASH OUT</span>";
                     
-                    try {
-                        const res = await fetch('/place-bet/', {
-                            method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
-                            body: JSON.stringify({ amount: bets[p].amount })
-                        });
-                        const data = await res.json();
-                        if(data.success) {
-                            globalFleePoint = Math.min(globalFleePoint, data.crash_point);
-                        }
-                    } catch(e) { console.error("Bet sync failed"); }
+                    // We skip the django '/place-bet/' fetch here to keep the visual balance pure for the fake withdrawal trick.
                 }
             }
-
-            if(!userHasActiveBet) {
-                globalFleePoint = (Math.random() * 10 + 1.1).toFixed(2);
-            }
-
             flightLoop();
         }
 
@@ -411,7 +448,6 @@
             [1, 2].forEach(p => {
                 if(bets[p].state === 'in_play') {
                     const btnTitle = document.getElementById(`btn-title-${p}`);
-                    // Only update if not currently spinning to cash out
                     if(!btnTitle.innerHTML.includes('svg')) {
                         document.getElementById(`btn-sub-${p}`).innerText = (bets[p].amount * currentMultiplier).toFixed(2) + ' KES';
                     }
@@ -447,12 +483,10 @@
             let y = canvas.height - Math.min(canvas.height * 0.8, Math.pow(t, 2) * 8);
 
             ctx.quadraticCurveTo(x * 0.5, canvas.height, x, y);
-            
             ctx.lineTo(x, canvas.height);
             ctx.lineTo(0, canvas.height);
             ctx.fillStyle = 'rgba(220, 0, 0, 0.2)';
             ctx.fill();
-            
             ctx.stroke();
 
             let wobble = Math.sin(Date.now() / 100) * 2;
@@ -465,6 +499,9 @@
             gameState = 'crashed';
             cancelAnimationFrame(animationFrame);
             
+            // STOP SOUND
+            flightSound.pause();
+
             multDisplay.classList.add('hidden');
             multDisplay.classList.remove('pulse');
             plane.classList.add('hidden');
@@ -494,64 +531,23 @@
 
         setTimeout(startLoading, 1000);
 
-        // --- FAKE LIVE BETS FEED ---
-        const liveBets = document.getElementById('live-bets');
-        const betCount = document.getElementById('live-bet-count');
-        let currentBetCount = 15822;
-        const names = ['Kevo***', 'Otile_1', 'JaneD', 'Wanja99', 'Sultan', 'Chief254', 'BrianO'];
-        
-        setInterval(() => {
-            currentBetCount += Math.floor(Math.random() * 3);
-            betCount.innerText = currentBetCount.toLocaleString() + ' Bets';
-
-            const row = document.createElement('div');
-            row.className = "flex justify-between items-center bg-[#1b1c1d] p-1.5 rounded border border-gray-800 text-[10px]";
-            const user = names[Math.floor(Math.random()*names.length)];
-            const amt = Math.floor(Math.random() * 2000 + 50);
-            
-            if(Math.random() > 0.6 && gameState === 'flying') {
-                const mult = (Math.random() * (currentMultiplier - 1) + 1.01).toFixed(2);
-                row.innerHTML = `<div class="flex gap-2 w-1/3"><span class="text-gray-400">${user}</span></div>
-                                 <div class="w-1/3 text-center text-gray-400">${amt} KES</div>
-                                 <div class="w-1/3 text-right"><span class="bg-[#28a745]/20 text-green-500 px-2 py-0.5 rounded-full font-bold">${mult}x</span></div>`;
-            } else {
-                row.innerHTML = `<div class="flex gap-2 w-1/3"><span class="text-gray-400">${user}</span></div>
-                                 <div class="w-1/3 text-center text-gray-400">${amt} KES</div>
-                                 <div class="w-1/3 text-right text-gray-600 font-bold">-</div>`;
-            }
-            liveBets.prepend(row);
-            if(liveBets.children.length > 15) liveBets.lastChild.remove();
-        }, 1200);
-
-        // --- AUTH & M-PESA ---
+        // --- AUTH & DEPOSIT (M-PESA) ---
         async function handleAuth(action) {
             const user = document.getElementById('auth-user').value;
             const pass = document.getElementById('auth-pass').value;
             const btn = document.querySelector(`#auth-modal button[onclick="handleAuth('${action}')"]`);
-            
             if(!user || !pass) return Swal.fire({title: 'Error', text: 'Fill all fields', icon: 'error', background: '#1b1c1d', color: '#fff'});
-
-            btn.innerHTML = `${spinnerHTML} ${action.toUpperCase()}ING...`;
-            btn.disabled = true;
-
+            btn.innerHTML = `${spinnerHTML} ${action.toUpperCase()}ING...`; btn.disabled = true;
             const res = await fetch(action === 'login' ? '/api/login/' : '/api/register/', {
                 method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
                 body: JSON.stringify({username: user, password: pass})
             });
             const data = await res.json();
-            if(data.success) {
-                location.reload();
-            } else {
-                Swal.fire({title: 'Failed', text: data.message, icon: 'error', background: '#1b1c1d', color: '#fff'});
-                btn.innerHTML = action.toUpperCase();
-                btn.disabled = false;
-            }
+            if(data.success) location.reload();
+            else { Swal.fire({title: 'Failed', text: data.message, icon: 'error', background: '#1b1c1d', color: '#fff'}); btn.innerHTML = action.toUpperCase(); btn.disabled = false; }
         }
 
-        async function logout() {
-            await fetch('/api/logout/', {method: 'POST', headers: {'X-CSRFToken': csrfToken}});
-            location.reload();
-        }
+        async function logout() { await fetch('/api/logout/', {method: 'POST', headers: {'X-CSRFToken': csrfToken}}); location.reload(); }
 
         async function initiateDeposit() {
             const amt = parseFloat(document.getElementById('dep-amt').value);
@@ -559,11 +555,9 @@
             const btn = document.getElementById('dep-btn');
             
             if(!amt || !phone) return Swal.fire({title: 'Wait', text: 'Enter amount and phone', icon: 'warning', background: '#1b1c1d', color: '#fff'});
-            if(amt < 100) return Swal.fire({title: 'Minimum Deposit', text: 'Min deposit is KES 100.', icon: 'error', background: '#1b1c1d', color: '#fff'});
+            if(amt < 50) return Swal.fire({title: 'Minimum Deposit', text: 'Min deposit is KES 50.', icon: 'error', background: '#1b1c1d', color: '#fff'});
             
-            btn.disabled = true; 
-            btn.innerHTML = `${spinnerHTML} PROCESSING...`;
-            
+            btn.disabled = true; btn.innerHTML = `${spinnerHTML} PROCESSING...`;
             try {
                 const res = await fetch('/initiate-payment/', {
                     method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
@@ -576,8 +570,7 @@
                 } else throw new Error(d.message);
             } catch(e) {
                 Swal.fire({title: 'Error', text: e.message, icon: 'error', background: '#1b1c1d', color: '#fff'});
-                btn.disabled = false; 
-                btn.innerHTML = "PUSH TO PHONE";
+                btn.disabled = false; btn.innerHTML = "PUSH TO PHONE";
             }
         }
 
