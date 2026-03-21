@@ -148,8 +148,8 @@
             <button onclick="document.getElementById('deposit-modal').classList.add('hidden')" class="absolute top-3 right-5 text-gray-500 text-2xl hover:text-white">&times;</button>
             <h2 class="text-xl font-black mb-6 text-green-500 text-center uppercase tracking-widest">Fund Account</h2>
             
-            <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">Amount (Min KES 50)</label>
-            <input type="number" id="dep-amt" placeholder="50" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-4 outline-none text-center text-lg font-bold focus:border-green-500">
+            <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">Amount (Min KES 100)</label>
+            <input type="number" id="dep-amt" placeholder="100" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-4 outline-none text-center text-lg font-bold focus:border-green-500">
             
             <label class="block text-gray-400 text-[10px] uppercase font-bold mb-1 ml-1">M-Pesa Number</label>
             <input type="text" id="dep-phone" placeholder="07XX XXX XXX" class="w-full bg-black border border-gray-700 text-white rounded-xl p-4 mb-8 outline-none text-center font-bold focus:border-green-500">
@@ -590,7 +590,7 @@
             const btn = document.getElementById('dep-btn');
             
             if(!amt || !phone) return Swal.fire({title: 'Wait', text: 'Enter amount and phone', icon: 'warning', background: '#1b1c1d', color: '#fff'});
-            if(amt < 50) return Swal.fire({title: 'Minimum Deposit', text: 'Min deposit is KES 50.', icon: 'error', background: '#1b1c1d', color: '#fff'});
+            if(amt < 100) return Swal.fire({title: 'Minimum Deposit', text: 'Min deposit is KES 100.', icon: 'error', background: '#1b1c1d', color: '#fff'});
             
             btn.disabled = true; btn.innerHTML = `${spinnerHTML} PROCESSING...`;
             try {
