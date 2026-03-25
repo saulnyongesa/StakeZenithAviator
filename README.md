@@ -1,6 +1,6 @@
 StakeZenith - Aviator Simulation
 
-Repository: https://github.com/saulnyongesa/StakeZenith.git
+Repository: [https://github.com/saulnyongesa/StakeZenithAviator.git](https://github.com/saulnyongesa/StakeZenithAviator.git)
 
 *** DISCLAIMER: FOR EDUCATIONAL AND LEARNING PURPOSES ONLY ***
 This project is a simulation of a crash-style betting game built strictly for educational purposes, portfolio demonstration, and learning UI/UX design, HTML5 Canvas animations, and payment gateway integration. It is NOT a real gambling application. The creator and contributors are not responsible for any misuse of this software.
@@ -41,7 +41,7 @@ Ensure you have the following installed on your local machine:
 Installation & Setup
 
 1. Clone the repository
-   git clone https://github.com/saulnyongesa/StakeZenith.git
+   git clone https://github.com/saulnyongesa/StakeZenithAviator.git
    cd StakeZenith
 
 2. Create and activate a virtual environment (Recommended)
